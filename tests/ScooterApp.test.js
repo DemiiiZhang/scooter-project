@@ -1,5 +1,6 @@
 const User = require('../src/User')
 const ScooterApp = require('../src/ScooterApp')
+const Scooter = require('../src/Scooter')
 
 const scooterApp = new ScooterApp()
 // ScooterApp tests here
@@ -12,10 +13,38 @@ describe('registerUser method tests', () => {
   })
 })
 
-// log in
 
-// log out
+describe('ScooterApp methods test', () => {
 
-// rent scooter
+  // log in
+  test('can log in', () => {
+    scooterApp.loginUser('Joe Bloggs', 'test123')
+    expect(scooterApp.registeredUsers['Joe Bloggs'].loggedIn).toBe(true)
+  })
 
-// dock scooter
+  // log out
+  test('can log out', () => {
+    scooterApp.logoutUser('Joe Bloggs')
+    expect(scooterApp.registeredUsers['Joe Bloggs'].loggedIn).toBe(false)
+  })
+
+
+  // rent scooter
+  test('can rent', () => {
+    const scooter = new Scooter()
+    scooterApp.createScooter('london')
+    scooterApp.rentScooter(scooter, 'demi')
+    // expect(() => {
+    //   scooterApp.rentScooter(scooter, 'demi')
+    // }).toThrow('scooter already rented')
+    expect(scooterApp.stations['london'].includes(scooter)).toBe(false)
+    expect(scooter.user).toBe('demi')
+  })
+
+  // dock scooter
+  test('can dock', () => {
+    const scooter = new Scooter()
+    scooterApp.dockScooter(scooter, 'london')
+    expect(scooterApp.stations['london'].includes(scooter)).toBe(true)
+  })
+})
